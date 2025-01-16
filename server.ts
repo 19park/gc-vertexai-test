@@ -34,8 +34,28 @@ async function analyzePDF(filePath, projectId) {
   };
 
   const textPart = {
-    text: `You are a very professional document summarization specialist.
-    Please summarize the given document.`
+    text: `You are a contract manager for a waste collection and transport provider.
+We summarize the documentation provided and extract only the information necessary to register the contract on the system website.
+We want to format the results in Markdown format.
+Please configure the language as Korean.
+The required information is:
+
+- Contract period
+- Type of service
+- Contract unit price
+- Base rate
+- Tax classification (VAT)
+- Settlement reference date
+- Payment date
+- Discharger
+- Collection and transporter
+- Processor
+- Business name
+- Business address
+- Monthly base amount of emissions
+- Monthly base unit of emissions
+- Depositor/bank name/account number
+- Contract conclusion date`
   };
 
   const request = {
