@@ -1,0 +1,83 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Analyzer</title>
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+      }
+      .upload-container {
+          border: 2px dashed #ccc;
+          padding: 20px;
+          text-align: center;
+          margin-bottom: 20px;
+      }
+      .loading {
+          display: none;
+          margin: 20px 0;
+      }
+      #result {
+          white-space: pre-wrap;
+          background: #f5f5f5;
+          padding: 15px;
+          border-radius: 5px;
+      }
+  </style>
+</head>
+<body>
+<h1>PDF Analyzer</h1>
+<div class="upload-container">
+  <form id="uploadForm">
+    <input type="file" id="pdfFile" accept=".pdf" required>
+    <button type="submit">Analyze PDF</button>
+  </form>
+</div>
+<div id="loading" class="loading">Analyzing PDF...</div>
+<div id="result"></div>
+
+<script>
+  document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fileInput = document.getElementById('pdfFile');
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('result');
+
+    if (!fileInput.files[0]) {
+      alert('Please select a PDF file');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('pdf', fileInput.files[0]);
+
+    try {
+      loading.style.display = 'block';
+      result.textContent = '';
+
+      const response = await fetch('/analyze', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Analysis failed');
+      }
+
+      const data = await response.json();
+      result.textContent = JSON.stringify(data, null, 2);
+    } catch (error) {
+      result.textContent = 'Error: ' + error.message;
+    } finally {
+      loading.style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
